@@ -1,0 +1,16 @@
+[
+    {
+        "source_tenant": "a",
+        "source": "host1",
+        "destination_tenant": "a",
+        "destination": "host2",
+        "nfv": false
+    },
+    {
+        "source_tenant": "a",
+        "source": "host1",
+        "destination_tenant": "b",
+        "destination": "host1",
+        "nfv": false
+    }
+]
