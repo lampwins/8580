@@ -30,5 +30,13 @@
         "destination": "host3",
         "nfv": true,
         "permit": true
+    },
+    {
+        "source_tenant": "b",
+        "source": "host1",
+        "destination_tenant": "b",
+        "destination": "host3",
+        "nfv": false,
+        "permit": false
     }
 ]
