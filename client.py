@@ -71,7 +71,26 @@ def main(source_tenant, source, destination_tenant, destination, message):
             send_log(source_tenant, source, f"Received successful response from tenant {destination_tenant} host {destination}")
         else:
             send_log(source_tenant, source, f"Transmission failed!")
-    
+
+    elif data['method'] == 'nfv':
+        send_log(source_tenant, source, "Authorized via NFV inspection")
+        send_log(source_tenant, source, "Opening session to NFV service chain")
+
+        host = router['tenants'][destination_tenant]["nfv"]['host']
+        port = router['tenants'][destination_tenant]["nfv"]['port']
+
+        # make proxied request through the nfv
+        response = requests.post(
+            f"http://{host}:{port}/nfv",
+            headers=headers,
+            json=payload
+        )
+
+        if response.json().get('your_message'):
+            send_log(source_tenant, source, f"Received successful response from tenant {destination_tenant} host {destination}")
+        else:
+            send_log(source_tenant, source, f"Transmission failed!")
+
     send_log(source_tenant, source, "Transmission complete")
     send_log(source_tenant, source, "-"*75)
 

@@ -4,13 +4,31 @@
         "source": "host1",
         "destination_tenant": "a",
         "destination": "host2",
-        "nfv": false
+        "nfv": false,
+        "permit": true
     },
     {
         "source_tenant": "a",
         "source": "host1",
         "destination_tenant": "b",
         "destination": "host1",
-        "nfv": false
+        "nfv": false,
+        "permit": true
+    },
+    {
+        "source_tenant": "a",
+        "source": "host1",
+        "destination_tenant": "a",
+        "destination": "host3",
+        "nfv": true,
+        "permit": true
+    },
+    {
+        "source_tenant": "a",
+        "source": "host1",
+        "destination_tenant": "b",
+        "destination": "host3",
+        "nfv": true,
+        "permit": true
     }
 ]

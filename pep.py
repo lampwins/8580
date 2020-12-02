@@ -37,6 +37,7 @@ def match(payload, rule):
         and payload['source'] == rule['source']
         and payload['destination_tenant'] == rule['destination_tenant']
         and payload['destination'] == rule['destination']
+        and rule['permit']
     ):
         return True
     return False
@@ -69,16 +70,32 @@ def proxy():
         if not authorized:
             return jsonify({'authorized': False})
 
-        send_log(tenant, "router", f"Authorized, forwarding to host {payload['destination']}")
+        if method == 'nfv':
+            send_log(tenant, "router", "Authorized via NFV inspection")
+            send_log(tenant, "router", "Opening session to NFV service chain")
 
-        host = router['tenants'][payload['destination_tenant']]["hosts"][payload['destination']]['host']
-        port = router['tenants'][payload['destination_tenant']]["hosts"][payload['destination']]['port']
+            host = router['tenants'][payload['destination_tenant']]["nfv"]['host']
+            port = router['tenants'][payload['destination_tenant']]["nfv"]['port']
 
-        response = requests.post(
-            f"http://{host}:{port}/payload",
-            headers=headers,
-            json=payload
-        )
+            # make proxied request through the nfv
+            response = requests.post(
+                f"http://{host}:{port}/nfv",
+                headers=headers,
+                json=payload
+            )
+
+        else:
+
+            send_log(tenant, "router", f"Authorized, forwarding to host {payload['destination']}")
+
+            host = router['tenants'][payload['destination_tenant']]["hosts"][payload['destination']]['host']
+            port = router['tenants'][payload['destination_tenant']]["hosts"][payload['destination']]['port']
+
+            response = requests.post(
+                f"http://{host}:{port}/payload",
+                headers=headers,
+                json=payload
+            )
 
         return response.json()
 
